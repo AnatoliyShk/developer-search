@@ -8,6 +8,17 @@ class Project(models.Model):
     source_link = models.CharField(max_length=200, null = True, blank = True)
     created_at = models.DateTimeField(auto_now_add=True)
     id = models.UUIDField(default=uuid.uuid4, unique=True, primary_key=True, editable=False)
-    
+
     def __str__(self):
         return self.title
+
+class Review(models.Model):
+    VOTE_TYPE = (
+        ('upvote', 'Upvote'),
+        ('downvote', 'Downvote'),
+    )
+    body = models.TextField(null = True, blank = True)
+    value = models.CharField(max_length=200, null = True, blank = True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    id = models.UUIDField(default=uuid.uuid4, unique=True, primary_key=True, editable=False)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
