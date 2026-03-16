@@ -7,6 +7,9 @@ class Project(models.Model):
     demo_link = models.CharField(max_length=200, null = True, blank = True)
     source_link = models.CharField(max_length=200, null = True, blank = True)
     created_at = models.DateTimeField(auto_now_add=True)
+    tags = models.ManyToManyField('Tag', blank=True)
+    vote_total = models.IntegerField(default=0, null = True, blank = True)
+    vote_ratio = models.IntegerField(default=0, null = True, blank = True)
     id = models.UUIDField(default=uuid.uuid4, unique=True, primary_key=True, editable=False)
 
     def __str__(self):
@@ -21,4 +24,15 @@ class Review(models.Model):
     value = models.CharField(max_length=200, null = True, blank = True)
     created_at = models.DateTimeField(auto_now_add=True)
     id = models.UUIDField(default=uuid.uuid4, unique=True, primary_key=True, editable=False)
-    project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    project = models.ForeignKey('Project', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.value
+
+class Tag(models.Model):
+    name = models.CharField(max_length=200)
+    created_at = models.DateTimeField(auto_now_add=True)
+    id = models.UUIDField(default=uuid.uuid4, unique=True, primary_key=True, editable=False)
+
+    def __str__(self):
+        return self.value
