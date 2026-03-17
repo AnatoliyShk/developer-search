@@ -35,4 +35,4 @@ class Tag(models.Model):
     id = models.UUIDField(default=uuid.uuid4, unique=True, primary_key=True, editable=False)
 
     def __str__(self):
-        return self.value
+        return self.name
