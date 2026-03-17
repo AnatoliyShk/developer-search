@@ -1,0 +1,11 @@
+{% extends "main.html" %}
+
+{% block content %}
+    <h1>{{ title }}</h1>
+    <form method="POST">
+        <h1>Are you sure you want to delete "{{ project }}"?</h1>
+        <a href="{% url 'project_detail' project.id %}"><button>Go back</button></a>
+        {% csrf_token %}
+        <button type="submit">Submit</button>
+    </form>
+{% endblock %}
