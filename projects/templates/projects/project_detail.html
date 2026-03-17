@@ -1,6 +1,10 @@
 {% extends "main.html" %}
 
 {% block content %}
+
+    {% if project.featured_image %}
+        <img src="{{ project.featured_image.url }}" alt="Project Image" style="max-width: 300px;">
+    {% endif %}
     <h1>Project Detail</h1>
     <h2>{{ project.title }}</h2>
     <p>{{ project.description }}</p>
