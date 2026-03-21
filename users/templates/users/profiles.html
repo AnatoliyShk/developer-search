@@ -1,0 +1,14 @@
+{% extends 'main.html' %}
+
+{% block content %}
+    <h1>User Profiles</h1>
+    <div class="profile-list">
+        {% for user in users %}
+            <div class="profile-card">
+                <h2>{{ user.username }}</h2>
+                <p>Email: {{ user.email }}</p>
+                <p>Joined: {{ user.date_joined }}</p>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
