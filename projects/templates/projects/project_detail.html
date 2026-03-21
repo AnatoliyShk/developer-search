@@ -1,17 +1,63 @@
 {% extends "main.html" %}
 
 {% block content %}
+    
 
-    {% if project.featured_image %}
-        <img src="{{ project.featured_image.url }}" alt="Project Image" style="max-width: 300px;">
-    {% endif %}
-    <h1>Project Detail</h1>
-    <h2>{{ project.title }}</h2>
-    <p>{{ project.description }}</p>
-    <p>Tags:</p>
-    <ul>
-        {% for tag in tags %}
-            <li>{{ tag.name }}</li>
-        {% endfor %}
-    </ul>
+    <main class="singleProject my-md">
+    <div class="container">
+      <div class="layout">
+        <div class="column column--1of3">
+          <h3 class="singleProject__subtitle">{{ project.title }}</h3>
+          <div class="singleProject__toolStack">
+            {% for tag in tags %}
+                <span class="tag tag--pill tag--sub tag--lg">
+                <small>{{ tag.name }}</small>
+                </span>
+            {% endfor %}
+          </div>
+          {% if project.source_link %}
+            <a class="singleProject__liveLink" href="{{ project.source_link }}" target="_blank"><i class="fas fa-external-link-alt"></i></i>Source Code
+            </a>
+          {% endif %}
+        {% if project.demo_link %}
+            <a class="singleProject__liveLink" href="{{ project.demo_link }}" target="_blank"><i class="fas fa-external-link-alt"></i>Live Demo
+            </a>
+        {% endif %}
+        </div>
+        <div class="column column--2of3">
+            {% if project.featured_image %}
+                <img class="singleProject__preview" src="{{ project.featured_image.url }}" alt="portfolio thumbnail" />
+            {% endif %}
+            <a href="profile.html" class="singleProject__developer">Md. Shahriar Parvez</a>
+            <h2 class="singleProject__title">Portfolio Landing Page for a Coding Mentor</h2>
+            <h3 class="singleProject__subtitle">About the Project</h3>
+            <div class="singleProject__info">
+            {{ project.description }}
+            </div>
+
+          <div class="comments">
+            <h3 class="singleProject__subtitle">Feedback</h3>
+            <h5 class="project--rating">
+                <span style="font-weight: bold;">{{ project.vote_ratio }}</span> Positive
+                Feedback ({{ project.vote_total }} Vote{{ project.vote_total|pluralize:"s" }})
+            </h5>
+
+            <form class="form" action="#" method="POST">
+              <!-- Textarea -->
+              <div class="form__field">
+                <label for="formInput#textarea">Comments: </label>
+                <textarea class="input input--textarea" name="message" id="formInput#textarea"
+                  placeholder="Write your comments here..."></textarea>
+              </div>
+              <input class="btn btn--sub btn--lg" type="submit" value="Comments" />
+            </form>
+            <div class="commentList">
+    
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+  </main>
 {% endblock %}
