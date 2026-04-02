@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User
 import uuid
 
+from django.db.model.signals import post_save
+
 class Profile(models.Model):
     user = models.OneToOneField('auth.User', on_delete=models.CASCADE)
     name = models.CharField(max_length=100, blank=True)
