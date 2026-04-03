@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 import uuid
 
-from django.db.model.signals import post_save
+from django.db.model.signals import post_save, post_delete
 
 class Profile(models.Model):
     user = models.OneToOneField('auth.User', on_delete=models.CASCADE)
@@ -31,3 +31,14 @@ class Skill(models.Model):
 
     def __str__(self):
         return str(self.name)   
+
+def profileUpdated(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
+
+def profileDeleted(sender, instance, **kwargs):
+    if instance.profile:
+        instance.profile.delete()
+
+post_save.connect(profileUpdated, sender=User)
+post_delete.connect(profileDeleted, sender=User)
