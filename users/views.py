@@ -9,10 +9,18 @@ def loginPage(request):
         username = request.POST['username']
         password = request.POST['password']
 
+        try:
+            user = User.objects.get(username=username)
+        except:
+            user = None
+
         user = authenticate(request, username=username, password=password)
 
         if user is not None:
             login(request, user)
+            return redirect('profiles')
+        else:
+            messages.error(request, 'Username OR password is incorrect')
     return render(request, 'users/login_register.html')
 
 def profiles(request):
