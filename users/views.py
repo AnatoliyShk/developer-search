@@ -1,11 +1,13 @@
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from .models import Profile
 
-# Create your views here.
-
 def loginUser(request):
-    try request.method == 'POST':
+    if request.user.is_authenticated:
+        return redirect('profiles')
+
+    if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
 
