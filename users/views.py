@@ -30,6 +30,9 @@ def logoutUser(request):
     logout(request)
     return redirect('login')
 
+def registerUser(request):
+    return render(request, 'users/login_register.html')
+
 def profiles(request):
     profiles = Profile.objects.all()
     return render(request, 'users/profiles.html', {'profiles': profiles})
