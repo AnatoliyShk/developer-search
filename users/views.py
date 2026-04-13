@@ -1,6 +1,9 @@
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 from .models import Profile
 
 def loginUser(request):
@@ -8,16 +11,16 @@ def loginUser(request):
         return redirect('profiles')
 
     if request.method == 'POST':
-        username = request.POST['username']
+        name = request.POST['name']
         password = request.POST['password']
 
         try:
-            user = User.objects.get(username=username)
+            user = User.objects.get(name=name)
         except:
             messages.error(request, 'User does not exist')
             user = None
 
-        user = authenticate(request, username=username, password=password)
+        user = authenticate(request, username=name, password=password)
 
         if user is not None:
             login(request, user)
@@ -31,7 +34,20 @@ def logoutUser(request):
     return redirect('login')
 
 def registerUser(request):
-    return render(request, 'users/login_register.html')
+    page = 'register'
+    form = UserCreationForm()
+
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.name = user.name.lower()
+            user.save()
+
+            messages.success(request, 'User account created successfully')
+
+    context = {'page': page, 'form': form}
+    return render(request, 'users/login_register.html', context)
 
 def profiles(request):
     profiles = Profile.objects.all()
