@@ -12,9 +12,19 @@ def profileUpdated(sender, instance, created, **kwargs):
             email=instance.email
         )
 
+def updateUser(sender, instance, created, **kwargs):
+    profile = instance
+    user = profile.user
+    if created == False:
+        user.first_name = profile.name
+        user.name = profile.name
+        user.email = profile.email
+        user.save()
+
 def profileDeleted(sender, instance, **kwargs):
     if instance.profile:
         instance.profile.delete()
 
 post_save.connect(profileUpdated, sender=User)
+post_save.connect(updateUser, sender=User)
 post_delete.connect(profileDeleted, sender=User)

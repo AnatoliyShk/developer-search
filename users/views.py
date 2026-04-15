@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from .models import Profile
-from .forms import CustomUserCreationForm
+from .forms import CustomUserCreationForm, ProfileForm
 
 def loginUser(request):
     if request.user.is_authenticated:
@@ -64,3 +64,16 @@ def userProfile(request, pk):
 def userAccount(request):
     profile = request.user.profile
     return render(request, 'users/user-account.html', {'profile': profile})
+
+@login_required(login_url='login')
+def editAccount(request):
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, request.FILES, instance=request.user.profile)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Profile updated successfully')
+            return redirect('user-account')
+    else:
+        form = ProfileForm(instance=request.user.profile)
+
+    return render(request, 'users/profile_form.html', {'form': form})

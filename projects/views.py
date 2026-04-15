@@ -19,7 +19,9 @@ def create_project(request):
     if request.method == "POST":
         form = ProjectForm(request.POST,request.FILES)
         if form.is_valid():
-            form.save()
+            project = form.save(commit=False)
+            project.owner = request.user.profile
+            project.save()
             return redirect('projects')
     else:
         form = ProjectForm()
@@ -27,7 +29,8 @@ def create_project(request):
 
 @login_required(login_url='login')
 def update_project(request, pk):
-    project = Project.objects.get(id=pk)
+    profile = request.user.profile
+    project = profile.project_set.get(id=pk)
     if request.method == "POST":
         form = ProjectForm(request.POST, request.FILES, instance=project)
         if form.is_valid():
@@ -39,6 +42,7 @@ def update_project(request, pk):
 
 @login_required(login_url='login')
 def delete_project(request, pk):
+    profile = request.user.profile
     project = Project.objects.get(id=pk)
     if request.method == "POST":
         project.delete()
