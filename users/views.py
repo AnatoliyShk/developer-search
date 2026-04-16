@@ -77,3 +77,34 @@ def editAccount(request):
         form = ProfileForm(instance=request.user.profile)
 
     return render(request, 'users/profile_form.html', {'form': form})
+
+@login_required(login_url='login')
+def createSkill(request):
+    profile = request.user.profile
+    form = SkillForm(request.POST)
+
+    if request.method == 'POST':
+        form = SkillForm(request.POST)
+        if form.is_valid():
+            skill = form.save(commit=False)
+            skill.owner = profile
+            skill.save()
+            messages.success(request, 'Skill created successfully')
+            return redirect('user-account')
+
+    return render(request, 'users/skill_form.html', {'form': form})
+
+@login_required(login_url='login')
+def updateSkill(request, pk):
+    profile = request.user.profile
+    skill = profile.skill_set.get(id=pk)
+    form = SkillForm(request.POST, instance=skill)
+
+    if request.method == 'POST':
+        form = SkillForm(request.POST, instance=skill)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Skill updated successfully')
+            return redirect('user-account')
+
+    return render(request, 'users/skill_form.html', {'form': form})

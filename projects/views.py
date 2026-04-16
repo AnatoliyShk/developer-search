@@ -43,7 +43,7 @@ def update_project(request, pk):
 @login_required(login_url='login')
 def delete_project(request, pk):
     profile = request.user.profile
-    project = Project.objects.get(id=pk)
+    project = profile.project_set.get(id=pk)
     if request.method == "POST":
         project.delete()
         return redirect('projects')
