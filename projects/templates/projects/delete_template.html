@@ -4,8 +4,8 @@
     <h1>{{ title }}</h1>
     <form method="POST">
         <h1>Are you sure you want to delete "{{ project }}"?</h1>
-        <a href="{% url 'project_detail' project.id %}"><button>Go back</button></a>
+        <a class="btn btn--sub btn--lg my-md" href="{{ request.GET.get('next') }}"><button>Go back</button></a>
         {% csrf_token %}
-        <button type="submit">Submit</button>
+        <input class="btn btn--main btn--lg my-md" type="submit" value="Submit">
     </form>
 {% endblock %}
