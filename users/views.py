@@ -4,8 +4,11 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import Profile
+from .models import Profile, Skill
+from django.db.models import Q
+from django.shortcuts import redirect
 from .forms import CustomUserCreationForm, ProfileForm
+from .utils import searchProfiles
 
 def loginUser(request):
     if request.user.is_authenticated:
@@ -51,8 +54,9 @@ def registerUser(request):
     return render(request, 'users/login_register.html', context)
 
 def profiles(request):
-    profiles = Profile.objects.all()
-    return render(request, 'users/profiles.html', {'profiles': profiles})
+    profiles, search_query = searchProfiles(request)
+    context = {'profiles': profiles, 'search_query': search_query}
+    return render(request, 'users/profiles.html', context)
 
 def userProfile(request, pk):
     profile = Profile.objects.get(id=pk)
@@ -108,3 +112,11 @@ def updateSkill(request, pk):
             return redirect('user-account')
 
     return render(request, 'users/skill_form.html', {'form': form})
+
+def deleteSkill(request, pk):
+    profile = request.user.profile
+    skill = profile.skill_set.get(id=pk)
+    if request.method == 'POST':
+        skill.delete()
+        return redirect('user-account')
+    return render(request, 'users/delete_template.html', {'object': skill})
