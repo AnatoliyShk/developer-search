@@ -5,7 +5,14 @@ from .models import Project, Tag
 from .forms import ProjectForm
 
 def projects(request):
-    projects = Project.objects.all()
+    search_query = ''
+    if request.GET.get('search_query'):
+        search_query = request.GET.get('search_query')
+    projects = Project.objects.filter(
+        Q(title__icontains=search_query) | 
+        Q(description__icontains=search_query) |
+        Q(owner__name__icontains=search_query)
+    )
     title = "Projects"
     return render(request, 'projects/projects.html', {'projects': projects, 'title': title})
 
