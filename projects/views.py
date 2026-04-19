@@ -1,24 +1,19 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from .models import Project, Tag
 from .forms import ProjectForm
+from .utils import searchProjects
 
 def projects(request):
-    search_query = ''
-    if request.GET.get('search_query'):
-        search_query = request.GET.get('search_query')
-
-    tags = Tag.objects.filter(name__icontains=search_query)
-
-    projects = Project.objects.filter(
-        Q(title__icontains=search_query) | 
-        Q(description__icontains=search_query) |
-        Q(owner__name__icontains=search_query) | 
-        Q(tags__in=tags)
-    )
+    projects, search_query = searchProjects(request)
+    page = request.GET.get('page')
+    results = 3
+    paginator = Paginator(projects, results)
+    projects = paginator.get_page(page)
     title = "Projects"
-    return render(request, 'projects/projects.html', {'projects': projects, 'title': title})
+    return render(request, 'projects/projects.html', {'projects': projects, 'title': title, 'search_query': search_query})
 
 def project_detail(request, pk):
     project = Project.objects.get(id=pk)
