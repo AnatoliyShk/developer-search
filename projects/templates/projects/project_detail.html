@@ -38,21 +38,40 @@
           <div class="comments">
             <h3 class="singleProject__subtitle">Feedback</h3>
             <h5 class="project--rating">
-                <span style="font-weight: bold;">{{ project.vote_ratio }}</span> Positive
+                <span style="font-weight: bold;">{{ project.vote_ratio }}%</span> Positive
                 Feedback ({{ project.vote_total }} Vote{{ project.vote_total|pluralize:"s" }})
             </h5>
 
-            <form class="form" action="#" method="POST">
-              <!-- Textarea -->
-              <div class="form__field">
-                <label for="formInput#textarea">Comments: </label>
-                <textarea class="input input--textarea" name="message" id="formInput#textarea"
-                  placeholder="Write your comments here..."></textarea>
-              </div>
-              <input class="btn btn--sub btn--lg" type="submit" value="Comments" />
-            </form>
+            {% if request.user.profile.id in project.reviewers %}
+              <p>You have already reviewed this project.</p>
+            {% elif request.user.is_authenticated and request.user.profile == project.owner %}
+              <p>You cannot review your own project.</p>
+            {% elif request.user.is_authenticated %}
+              <form class="form" action="{% url 'project_detail' project.id %}" method="POST">
+                {% csrf_token %}
+                {% for field in review_form %}
+                    <div class="form__field">
+                      <label for="formInput#select">{{ field.label }}</label>
+                      {{ field }}
+                    </div>
+                {% endfor %}
+                <input class="btn btn--sub btn--lg" type="submit" value="Add review" />
+              </form>
+            {% else %}
+              <a href="{% url 'login' %}?next={{ request.path }}">Log in to leave a review</a>
+            {% endif %}
             <div class="commentList">
-    
+              {% for review in project.review_set.all %}
+                {% if review.body %}
+                  <div class="comment">
+                      <a href="{% url 'user-profile' review.owner.id %}"><img class="avatar avatar--md" src="{{ review.owner.profile.avatar.url }}" alt="User Avatar" /></a>
+                      <div class="comment__details">
+                        <a href="{% url 'user-profile' review.owner.id %}" class="comment__author">{{ review.owner.profile.name }}</a>
+                        <p class="comment__info">{{ review.body|linebreaksbr }}</p>
+                      </div>
+                  </div>
+                {% endif %}
+              {% endfor %}
             </div>
           </div>
         </div>

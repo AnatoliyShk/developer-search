@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
-from .models import Project, Tag
-from .forms import ProjectForm
+from .models import Project, Tag, Review
+from .forms import ProjectForm, ReviewForm
 from .utils import searchProjects, paginateProjects
 
 def projects(request):
@@ -14,7 +14,18 @@ def projects(request):
 def project_detail(request, pk):
     project = Project.objects.get(id=pk)
     tags = project.tags.all()
-    return render(request, 'projects/project_detail.html', {'project': project, 'tags': tags})
+    review_form = ReviewForm()
+    project.getVoteCount
+    if request.method == "POST":
+        review_form = ReviewForm(request.POST)
+        if review_form.is_valid():
+            review = review_form.save(commit=False)
+            review.project = project
+            review.owner = request.user.profile
+            review.save()
+            messages.success(request, 'Your review was successfully submitted!')
+            return redirect('project', pk=project.id)
+    return render(request, 'projects/project_detail.html', {'project': project, 'tags': tags, 'review_form': review_form})
 
 @login_required(login_url='login')
 def create_project(request):
