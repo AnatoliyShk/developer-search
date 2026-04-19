@@ -1,0 +1,27 @@
+ {% if queryset.has_other_pages %}
+      <div class="pagination">
+        <ul class="container">
+          {% if queryset.has_previous %}
+            <li>
+              <a class="pagination__link btn page-link btn--sub" href="?page={{ queryset.previous_page_number }}&search_query={{ search_query }}">< Previous</a>
+            </li>
+          {% endif %}
+          {% for i in queryset.paginator.page_range %}
+            {% if page == queryset.number %}
+              <li>
+                <a class="pagination__link btn page-link btn--sub" href="#">{{ i }}</a>
+              </li>
+            {% else %}
+              <li>
+                <a class="pagination__link btn page-link btn--sub" href="?page={{ i }}&search_query={{ search_query }}">{{ i }}</a>
+              </li>
+            {% endif %}
+          {% endfor %}
+          {% if queryset.has_next %}
+            <li>
+              <a class="pagination__link btn page-link btn--sub" href="?page={{ queryset.next_page_number }}&search_query={{ search_query }}">Next ></a>
+            </li>
+          {% endif %}
+        </ul>
+      </div>
+    {% endif %}

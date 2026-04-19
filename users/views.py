@@ -8,7 +8,7 @@ from .models import Profile, Skill
 from django.db.models import Q
 from django.shortcuts import redirect
 from .forms import CustomUserCreationForm, ProfileForm
-from .utils import searchProfiles
+from .utils import searchProfiles, paginateProfiles
 
 def loginUser(request):
     if request.user.is_authenticated:
@@ -55,7 +55,8 @@ def registerUser(request):
 
 def profiles(request):
     profiles, search_query = searchProfiles(request)
-    context = {'profiles': profiles, 'search_query': search_query}
+    profiles, custom_range = paginateProfiles(request, profiles, 4)
+    context = {'profiles': profiles, 'search_query': search_query, 'custom_range': custom_range}
     return render(request, 'users/profiles.html', context)
 
 def userProfile(request, pk):
