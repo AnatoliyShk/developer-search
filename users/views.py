@@ -15,7 +15,7 @@ def loginUser(request):
         return redirect('profiles')
 
     if request.method == 'POST':
-        username = request.POST['username']
+        username = request.POST['username'].lower()
         password = request.POST['password']
 
         try:
@@ -68,7 +68,7 @@ def userProfile(request, pk):
 @login_required(login_url='login')
 def userAccount(request):
     profile = request.user.profile
-    return render(request, 'users/user-account.html', {'profile': profile})
+    return render(request, 'users/account.html', {'profile': profile})
 
 @login_required(login_url='login')
 def editAccount(request):
@@ -121,3 +121,8 @@ def deleteSkill(request, pk):
         skill.delete()
         return redirect('user-account')
     return render(request, 'users/delete_template.html', {'object': skill})
+
+@login_required(login_url='login')
+def inbox(request):
+    context = {}
+    return render(request, 'users/inbox.html', context)

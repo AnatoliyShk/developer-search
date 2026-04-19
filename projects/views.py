@@ -19,12 +19,16 @@ def project_detail(request, pk):
     if request.method == "POST":
         review_form = ReviewForm(request.POST)
         if review_form.is_valid():
+            profile = request.user.profile
+            if project.review_set.filter(owner=profile).exists():
+                messages.error(request, 'You have already reviewed this project.')
+                return redirect('project_detail', pk=project.id)
             review = review_form.save(commit=False)
             review.project = project
-            review.owner = request.user.profile
+            review.owner = profile
             review.save()
             messages.success(request, 'Your review was successfully submitted!')
-            return redirect('project', pk=project.id)
+            return redirect('project_detail', pk=project.id)
     return render(request, 'projects/project_detail.html', {'project': project, 'tags': tags, 'review_form': review_form})
 
 @login_required(login_url='login')
