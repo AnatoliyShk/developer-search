@@ -39,7 +39,7 @@ def logoutUser(request):
 
 def registerUser(request):
     page = 'register'
-    form = UserCreationForm()
+    form = CustomUserCreationForm()
 
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
