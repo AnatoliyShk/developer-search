@@ -4,12 +4,23 @@ from django.dispatch import receiver
 from django.contrib.auth.models import User
 from .models import Profile
 
+from django.core.mail import send_mail
+from django.conf import settings
+
 def profileUpdated(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(
             user=instance,
             name=instance.username,
             email=instance.email
+        )
+
+        send_mail(
+            subject='Welcome to DevSearch',
+            message='Thank you for signing up for DevSearch! We are excited to have you on board. If you have any questions or need assistance, feel free to reach out to our support team.',
+            from_email=settings.EMAIL_HOST_USER,
+            recipient_list=[instance.email],
+            fail_silently=False,
         )
 
 def updateUser(sender, instance, created, **kwargs):
