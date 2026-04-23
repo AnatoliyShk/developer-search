@@ -30,7 +30,6 @@ def paginateProjects(request, projects, results):
     except EmptyPage:
         page = paginator.num_pages
         projects = paginator.get_page(paginator.num_pages)
-    title = "Projects"
 
     left_index = int(page) - 4
     if left_index < 1:
