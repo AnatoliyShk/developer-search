@@ -30,3 +30,8 @@ class ProjectModelTests(TestCase):
         # Test the string representation of a project
         project = Project.objects.create(name="Test Project")
         assert str(project) == "Test Project"
+
+    def test_project_creation_without_name(self):
+        # Test that creating a project without a name raises an error
+        with self.assertRaises(Exception):
+            Project.objects.create(name=None)
