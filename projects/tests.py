@@ -35,3 +35,8 @@ class ProjectModelTests(TestCase):
         # Test that creating a project without a name raises an error
         with self.assertRaises(Exception):
             Project.objects.create(name=None)
+
+    def test_project_creation_with_empty_name(self):
+        # Test that creating a project with an empty name raises an error
+        with self.assertRaises(Exception):
+            Project.objects.create(name="")
