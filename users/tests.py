@@ -16,3 +16,12 @@ def test_user_str_representation():
     User = get_user_model()
     user = User.objects.create_user(username="testuser", password="testpassword")
     assert str(user) == "testuser"
+
+def test_user_update():
+    # Test that a user can be updated successfully
+    User = get_user_model()
+    user = User.objects.create_user(username="testuser", password="testpassword")
+    user.username = "newusername"
+    user.save()
+    updated_user = User.objects.get(id=user.id)
+    assert updated_user.username == "newusername"
