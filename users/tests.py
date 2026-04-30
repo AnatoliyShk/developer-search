@@ -25,3 +25,12 @@ def test_user_update():
     user.save()
     updated_user = User.objects.get(id=user.id)
     assert updated_user.username == "newusername"
+
+def user_delete():
+    # Test that a user can be deleted successfully
+    User = get_user_model()
+    user = User.objects.create_user(username="testuser", password="testpassword")
+    user_id = user.id
+    user.delete()
+    with pytest.raises(User.DoesNotExist):
+        User.objects.get(id=user_id)
