@@ -34,3 +34,11 @@ def user_delete():
     user.delete()
     with pytest.raises(User.DoesNotExist):
         User.objects.get(id=user_id)
+
+def test_user_list():
+    # Test that a list of users can be retrieved successfully
+    User = get_user_model()
+    User.objects.create_user(username="testuser1", password="testpassword")
+    User.objects.create_user(username="testuser2", password="testpassword")
+    users = User.objects.all()
+    assert len(users) == 2
