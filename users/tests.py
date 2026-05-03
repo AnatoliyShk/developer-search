@@ -42,3 +42,10 @@ def test_user_list():
     User.objects.create_user(username="testuser2", password="testpassword")
     users = User.objects.all()
     assert len(users) == 2
+
+def test_user_detail():
+    # Test that a user's details can be retrieved successfully
+    User = get_user_model()
+    user = User.objects.create_user(username="testuser", password="testpassword")
+    retrieved_user = User.objects.get(id=user.id)
+    assert retrieved_user.username == "testuser"
