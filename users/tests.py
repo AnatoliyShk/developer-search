@@ -49,3 +49,10 @@ def test_user_detail():
     user = User.objects.create_user(username="testuser", password="testpassword")
     retrieved_user = User.objects.get(id=user.id)
     assert retrieved_user.username == "testuser"
+
+def test_user_authentication():
+    # Test that a user can be authenticated successfully
+    User = get_user_model()
+    user = User.objects.create_user(username="testuser", password="testpassword")
+    authenticated_user = User.objects.get(username="testuser")
+    assert authenticated_user.check_password("testpassword")
