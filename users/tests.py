@@ -56,3 +56,9 @@ def test_user_authentication():
     user = User.objects.create_user(username="testuser", password="testpassword")
     authenticated_user = User.objects.get(username="testuser")
     assert authenticated_user.check_password("testpassword")
+
+def test_user_permissions():
+    # Test that a user has the correct permissions
+    User = get_user_model()
+    user = User.objects.create_user(username="testuser", password="testpassword")
+    assert user.has_perm("auth.view_user")
