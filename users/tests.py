@@ -62,3 +62,12 @@ def test_user_permissions():
     User = get_user_model()
     user = User.objects.create_user(username="testuser", password="testpassword")
     assert user.has_perm("auth.view_user")
+
+def test_user_groups():
+    # Test that a user can be added to a group successfully
+    from django.contrib.auth.models import Group
+    User = get_user_model()
+    user = User.objects.create_user(username="testuser", password="testpassword")
+    group = Group.objects.create(name="Test Group")
+    user.groups.add(group)
+    assert group in user.groups.all()
