@@ -71,3 +71,10 @@ def test_user_groups():
     group = Group.objects.create(name="Test Group")
     user.groups.add(group)
     assert group in user.groups.all()
+
+def test_user_superuser():
+    # Test that a superuser can be created successfully
+    User = get_user_model()
+    superuser = User.objects.create_superuser(username="admin", password="adminpassword")
+    assert superuser.is_superuser
+    assert superuser.is_staff
