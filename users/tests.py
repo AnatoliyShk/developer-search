@@ -78,3 +78,9 @@ def test_user_superuser():
     superuser = User.objects.create_superuser(username="admin", password="adminpassword")
     assert superuser.is_superuser
     assert superuser.is_staff
+
+def test_user_email():
+    # Test that a user can have an email address
+    User = get_user_model()
+    user = User.objects.create_user(username="testuser", password="testpassword", email="testuser@example.com")
+    assert user.email == "testuser@example.com"
