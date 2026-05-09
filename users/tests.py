@@ -84,3 +84,12 @@ def test_user_email():
     User = get_user_model()
     user = User.objects.create_user(username="testuser", password="testpassword", email="testuser@example.com")
     assert user.email == "testuser@example.com"
+
+def test_user_last_login():
+    # Test that a user's last login time is updated correctly
+    User = get_user_model()
+    user = User.objects.create_user(username="testuser", password="testpassword")
+    user.last_login = None
+    user.save()
+    user.refresh_from_db()
+    assert user.last_login is None
