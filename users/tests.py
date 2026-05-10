@@ -93,3 +93,16 @@ def test_user_last_login():
     user.save()
     user.refresh_from_db()
     assert user.last_login is None
+
+def test_user_is_active():
+    # Test that a user can be deactivated and reactivated
+    User = get_user_model()
+    user = User.objects.create_user(username="testuser", password="testpassword")
+    user.is_active = False
+    user.save()
+    user.refresh_from_db()
+    assert not user.is_active
+    user.is_active = True
+    user.save()
+    user.refresh_from_db()
+    assert user.is_active
