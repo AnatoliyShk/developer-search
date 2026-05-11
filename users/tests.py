@@ -106,3 +106,10 @@ def test_user_is_active():
     user.save()
     user.refresh_from_db()
     assert user.is_active
+
+def test_user_not_authenticated():
+    # Test that an unauthenticated user cannot access certain views
+    from django.test import Client
+    client = Client()
+    response = client.get("/some-protected-view/")
+    assert response.status_code == 302  # Redirect to login page
