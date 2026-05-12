@@ -113,3 +113,13 @@ def test_user_not_authenticated():
     client = Client()
     response = client.get("/some-protected-view/")
     assert response.status_code == 302  # Redirect to login page
+
+def test_user_authenticated():
+    # Test that an authenticated user can access certain views
+    from django.test import Client
+    User = get_user_model()
+    user = User.objects.create_user(username="testuser", password="testpassword")
+    client = Client()
+    client.login(username="testuser", password="testpassword")
+    response = client.get("/some-protected-view/")
+    assert response.status_code == 200  # Access granted
