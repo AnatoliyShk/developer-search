@@ -123,3 +123,11 @@ def test_user_authenticated():
     client.login(username="testuser", password="testpassword")
     response = client.get("/some-protected-view/")
     assert response.status_code == 200  # Access granted
+
+def test_user_password_change():
+    # Test that a user can change their password successfully
+    User = get_user_model()
+    user = User.objects.create_user(username="testuser", password="testpassword")
+    user.set_password("newpassword")
+    user.save()
+    assert user.check_password("newpassword")
