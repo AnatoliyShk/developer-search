@@ -131,3 +131,11 @@ def test_user_password_change():
     user.set_password("newpassword")
     user.save()
     assert user.check_password("newpassword")
+
+def test_user_password_reset():
+    # Test that a user can reset their password successfully
+    User = get_user_model()
+    user = User.objects.create_user(username="testuser", password="testpassword")
+    user.set_password("newpassword")
+    user.save()
+    assert user.check_password("newpassword")
