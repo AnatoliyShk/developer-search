@@ -40,3 +40,10 @@ class ProjectModelTests(TestCase):
         # Test that creating a project with an empty name raises an error
         with self.assertRaises(Exception):
             Project.objects.create(name="")
+            
+    def test_project_list(self):
+        # Test that a list of projects can be retrieved successfully
+        Project.objects.create(name="Project 1")
+        Project.objects.create(name="Project 2")
+        projects = Project.objects.all()
+        assert len(projects) == 2
