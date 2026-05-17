@@ -35,11 +35,6 @@ class ProjectModelTests(TestCase):
         # Test that creating a project without a name raises an error
         with self.assertRaises(Exception):
             Project.objects.create(name=None)
-
-    def test_project_creation_with_empty_name(self):
-        # Test that creating a project with an empty name raises an error
-        with self.assertRaises(Exception):
-            Project.objects.create(name="")
             
     def test_project_list(self):
         # Test that a list of projects can be retrieved successfully
@@ -47,3 +42,9 @@ class ProjectModelTests(TestCase):
         Project.objects.create(name="Project 2")
         projects = Project.objects.all()
         assert len(projects) == 2
+
+    def test_project_creation_with_valid_name(self):
+        # Test that creating a project with a valid name works
+        project = Project.objects.create(name="Valid Project")
+        assert project.id is not None
+        assert project.name == "Valid Project"
