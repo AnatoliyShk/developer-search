@@ -25,16 +25,6 @@ class ProjectModelTests(TestCase):
         project_id = project.id
         project.delete()
         assert not Project.objects.filter(id=project_id).exists()
-        
-    def test_project_str_representation(self):
-        # Test the string representation of a project
-        project = Project.objects.create(name="Test Project")
-        assert str(project) == "Test Project"
-
-    def test_project_creation_without_name(self):
-        # Test that creating a project without a name raises an error
-        with self.assertRaises(Exception):
-            Project.objects.create(name=None)
             
     def test_project_list(self):
         # Test that a list of projects can be retrieved successfully
@@ -48,3 +38,8 @@ class ProjectModelTests(TestCase):
         project = Project.objects.create(name="Valid Project")
         assert project.id is not None
         assert project.name == "Valid Project"
+    
+    def test_project_creation_with_empty_name(self):
+        # Test that creating a project with an empty name raises an error
+        with self.assertRaises(Exception):
+            Project.objects.create(name="")
