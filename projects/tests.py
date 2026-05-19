@@ -43,3 +43,9 @@ class ProjectModelTests(TestCase):
         # Test that creating a project with an empty name raises an error
         with self.assertRaises(Exception):
             Project.objects.create(name="")
+
+    def test_project_creation_with_long_name(self):
+        # Test that creating a project with a name that exceeds the max length raises an error
+        long_name = "A" * 256  # Assuming max_length is 255
+        with self.assertRaises(Exception):
+            Project.objects.create(name=long_name)
