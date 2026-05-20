@@ -49,3 +49,9 @@ class ProjectModelTests(TestCase):
         long_name = "A" * 256  # Assuming max_length is 255
         with self.assertRaises(Exception):
             Project.objects.create(name=long_name)
+
+    def test_project_creation_with_special_characters(self):
+        # Test that creating a project with special characters in the name works
+        project = Project.objects.create(name="Project @123")
+        assert project.id is not None
+        assert project.name == "Project @123"
