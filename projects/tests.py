@@ -52,6 +52,12 @@ class ProjectModelTests(TestCase):
 
     def test_project_creation_with_special_characters(self):
         # Test that creating a project with special characters in the name works
-        project = Project.objects.create(name="Project @123")
+        project = Project.objects.create(name="Project @123-_")
         assert project.id is not None
         assert project.name == "Project @123"
+    
+    def test_project_creation_with_duplicate_name(self):    
+        # Test that creating a project with a duplicate name raises an error
+        Project.objects.create(name="Duplicate Project")
+        with self.assertRaises(Exception):
+            Project.objects.create(name="Duplicate Project")
