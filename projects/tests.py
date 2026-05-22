@@ -61,3 +61,8 @@ class ProjectModelTests(TestCase):
         Project.objects.create(name="Duplicate Project")
         with self.assertRaises(Exception):
             Project.objects.create(name="Duplicate Project")
+        
+    def test_project_creation_with_whitespace_name(self):
+        # Test that creating a project with a name that is only whitespace raises an error
+        with self.assertRaises(Exception):
+            Project.objects.create(name="   ")
